@@ -12,20 +12,20 @@
                 <h2 class="display-6 mb-3">Pridat poziadavku</h2>
             </div>
             <div class="row">
-                <form>
+                <form action="./db/ticket_store.php" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="requestTitle" class="form-label">Tema</label>
-                        <input type="text" class="form-control" id="requestTitle" placeholder="Введите тему заявки">
+                        <input type="text" name ="title" class="form-control" id="requestTitle" placeholder="napiste temu poziadavky">
                     </div>
       
                     <div class="mb-3">
                         <label for="attachments" class="form-label">Pridat subory</label>
-                        <input class="form-control" type="file" id="attachments" multiple>
+                        <input class="form-control" name="image" type="file" id="attachments" multiple>
                     </div>
       
                     <div class="mb-3">
                         <label for="description" class="form-label">Opis</label>
-                        <textarea class="form-control" id="description" rows="3" placeholder="Опишите проблему..."></textarea>
+                        <textarea class="form-control" name="description" id="description" rows="3" placeholder="opiste Vas problem"></textarea>
                     </div>
       
                     <button type="submit" class="btn btn-outline-primary">Pridat</button>
