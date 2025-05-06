@@ -43,7 +43,7 @@
                             ?>
                             <th>
                                 <td>
-                                    <img src="/project_PHP_SJ/project_PHP_SJ/<?= htmlspecialchars($ticket['image']) ?>" width="200" alt="">
+                                    <img src="/project_PHP_SJ/project_PHP_SJ/<?= $ticket['image'] ?>" width="200" alt="">
                                 </td>
                                 <td>opravit</td>
                                 <td>
@@ -57,10 +57,12 @@
                                             akcie
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href="#">hotovo</a></li>
-                                            <li><a class="dropdown-item" href="#">v praci</a></li>
-                                            <li><a class="dropdown-item" href="#">odmietne</a></li>
-                                            <li><a class="dropdown-item" href="#">odstranit</a></li>
+                                            <li>
+                                                <form action="./db/ticket_remove.php" method="post">
+                                                    <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
+                                                    <button type="submit" class="dropdown-item">Odstrániť</button>
+                                                </form>
+                                            </li>
                                         </ul>
                                     </div>
                                 </td>
