@@ -13,32 +13,37 @@
                     Register
                 </div>
                 <div class="card-body">
-                    <form>
+                    <form method="post" action="./db/register.php">
                         <div class="mb-3">
                             <label for="email" class="form-label">e-mail</label>
-                            <input type="email" class="form-control" id="email">
+                            <input type="email" name="email" class="form-control" id="email">
                         </div>
-              
+
                         <div class="mb-3">
-                            <label for="fullname" class="form-label">meno a priezvisko</label>
-                            <input type="text" class="form-control" id="fullname">
+                            <label for="first-name" class="form-label">meno</label>
+                            <input type="text" name="first_name" class="form-control" id="first-name">
                         </div>
-              
+
+                        <div class="mb-3">
+                            <label for="last-name" class="form-label">priezvisko</label>
+                            <input type="text" name="last_name" class="form-control" id="last-name">
+                        </div>
+
                         <div class="mb-3">
                             <label for="birthdate" class="form-label">datum narodenia</label>
-                            <input type="datetime-local" class="form-control" id="birthdate" placeholder="dd.mm.rrrr --:--">
+                            <input type="date" name="date_of_birth" class="form-control" id="birthdate">
                         </div>
-              
+
                         <div class="mb-3">
                             <label for="password" class="form-label">heslo</label>
-                            <input type="password" class="form-control" id="password">
+                            <input type="password" name="password" class="form-control" id="password">
                         </div>
-              
+
                         <div class="mb-3">
-                            <label for="confirm-password" class="form-label">podtvrdenie hesla</label>
-                            <input type="password" class="form-control" id="confirm-password">
+                            <label for="confirm-password" class="form-label">potvrdenie hesla</label>
+                            <input type="password" name="password_confirmation" class="form-control" id="confirm-password">
                         </div>
-              
+
                         <button type="submit" class="btn btn-outline-primary">vytvorit ucet</button>
                     </form>
                 </div>
