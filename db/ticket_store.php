@@ -1,4 +1,5 @@
 <?php
+session_start();
 
 require_once __DIR__ . '/connect.php';
 
@@ -6,11 +7,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     die('Nesprávna metóda požiadavky');
 }
 
+if (!isset($_SESSION['user'])) {
+    echo 'Error';
+    die();
+}
+
 $title = $_POST['title'];
 $description = $_POST['description'];
 $image = $_FILES['image'];
 
-$user_id = 1;
+
 $tag_id = 3;
 
 $path = __DIR__ . '/../uploads';
@@ -31,9 +37,9 @@ try {
         'description' => $description,
         'image' => "uploads/$filename",
         'tag_id' => $tag_id,
-        'user_id' => $user_id
+        'user_id' => $_SESSION['user']
     ]);
     header('Location: /project_PHP_SJ/project_PHP_SJ/my-tickets.php');
 } catch (\PDOException $exception) {
-    die("Chyba uloženia: " .  $e->getMessage());
+    die("Chyba uloženia: " .  $exception->getMessage());
 }

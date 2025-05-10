@@ -1,3 +1,13 @@
+<?php
+require_once __DIR__ . '/../db/connect.php';
+
+$user = false;
+if (isset($_SESSION['user'])) {
+    $query = $conn->prepare("SELECT * FROM users WHERE id = :id");
+    $query->execute(['id' => $_SESSION['user']]);
+    $user = $query->fetch();
+}
+?>
 <header class="header">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
@@ -12,37 +22,46 @@
                             Domov
                         </a>
                     </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="./" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Poziadavky
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="./add-ticket.php">Pridat</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="./my-tickets.php">moje poziadavky</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="./tickets-control.php">
-                            Riadenie poziadaviek
-                        </a>
-                    </li>
+                    <?php if ($user): ?>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="./" role="button" data-bs-toggle="dropdown"
+                               aria-expanded="false">
+                                Poziadavky
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="./add-ticket.php">Pridat</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="./my-tickets.php">moje poziadavky</a></li>
+                            </ul>
+                        </li>
+                    <?php endif; ?>
                 </ul>
                 <div class="right-side d-flex">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                ucet
+                            <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <?= $user ? $user['first_name'] : 'ucet' ?>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="./login.php">login</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="./register.php">sing in</a></li>
+                                <?php if (!$user): ?>
+                                    <li><a class="dropdown-item" href="./login.php">login</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="./register.php">sign up</a></li>
+                                <?php else: ?>
+                                    <li>
+                                        <form action="./db/logout.php" method="post">
+                                            <button type="submit" class="dropdown-item">logout</button>
+                                        </form>
+                                    </li>
+                                <?php endif; ?>
                             </ul>
                         </li>
                     </ul>
-                    <form class="d-flex" role="search">
-                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <form class="d-flex" method="get" action="./" role="search">
+                        <input class="form-control me-2" type="search" name="search" 
+                               value="<?= $_GET['search'] ?? '' ?>" 
+                               placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
                 </div>

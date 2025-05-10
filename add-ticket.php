@@ -1,3 +1,10 @@
+<?php 
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: /project_PHP_SJ/project_PHP_SJ/login.php');
+    die();
+}
+?>
 <!doctype html>
 <html lang="sk">
 <head>

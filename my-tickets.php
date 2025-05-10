@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['user'])) {
+    header('Location: /project_PHP_SJ/project_PHP_SJ/login.php');
+    die();
+}
+?>
 <!doctype html>
 <html lang="sk">
 <head>
@@ -6,7 +13,6 @@
 </head>
 <body>
     <?php require_once __DIR__ . '/parts/header.php' ?>
-    <?php require_once __DIR__ . '/db/connect.php' ?>
     <section class="main">
         <div class="container">
             <div class="row">
@@ -24,11 +30,11 @@
                     </thead>
                     <tbody class="table-group-divider">
                         <?php
-                        $tags = $conn->query("SELECT * FROM `ticket_tags`")->fetchAll(PDO::FETCH_ASSOC);
+                        $tags = $conn->query("SELECT * FROM `ticket_tags`")->fetchAll();
 
-                        $query = $conn->prepare("SELECT * FROM tickets");
-                        $query->execute();
-                        $tickets = $query->fetchAll(PDO::FETCH_ASSOC);
+                        $query = $conn->prepare("SELECT * FROM tickets WHERE user_id = :user_id");
+                        $query->execute(['user_id' => $_SESSION['user']]);
+                        $tickets = $query->fetchAll();
                         ?>
 
                         <?php foreach ($tickets as $ticket): ?>
@@ -39,15 +45,20 @@
                                 return (int)$tag['id'] === (int)$tagId;
                             });
 
-                            $tag = array_shift($tag);
+                            $tag = array_shift($tag) ?: [
+                                'background' => '#000',
+                                'color' => '#fff',
+                                'label' => 'not found'
+                            ];
                             ?>
-                            <th>
+                            <tr>
                                 <td>
                                     <img src="/project_PHP_SJ/project_PHP_SJ/<?= $ticket['image'] ?>" width="200" alt="">
                                 </td>
-                                <td>opravit</td>
+                                <td><?= $ticket['title'] ?></td>
+                                <td><?= $ticket['description'] ?></td>
                                 <td>
-                                    <span class="badge bg-success" style="background: <?= $tag['background'] ?>; color: <?= $tag['color'] ?>;">
+                                    <span class="badge rounded-pill" style="background: <?= $tag['background'] ?>; color: <?= $tag['color'] ?>;">
                                         <?= $tag['label'] ?>
                                     </span>
                                 </td>
@@ -66,7 +77,7 @@
                                         </ul>
                                     </div>
                                 </td>
-                            </th>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
