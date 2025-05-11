@@ -1,5 +1,27 @@
 <?php 
 session_start();
+require_once __DIR__ . '/db/connect.php';
+$access = require __DIR__ . '/db/access.php';
+
+
+if (!isset($_SESSION['user'])) {
+    header('Location: /project_PHP_SJ/project_PHP_SJ/');
+    exit;
+}
+
+$query = $conn->prepare("SELECT * FROM users WHERE id = :id");
+$query->execute(['id' => $_SESSION['user']]);
+$user = $query->fetch();
+
+if ((int)$user['group_id'] !== $access['admin_user_group']) {
+    header('Location: /project_PHP_SJ/project_PHP_SJ/');
+    exit;
+}
+
+
+$tags = $conn->query("SELECT * FROM ticket_tags")->fetchAll();
+$tickets = $conn->query("SELECT * FROM tickets")->fetchAll();
+
 ?>
 <!doctype html>
 <html lang="sk">
@@ -25,14 +47,30 @@ session_start();
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
+                    <?php foreach ($tickets as $ticket): ?>
+                        <?php
+                        $tagId = $ticket['tag_id'];
+
+                        $tag = array_filter($tags, function ($tag) use ($tagId) {
+                            return (int)$tag['id'] === (int)$tagId;
+                        });
+                        $tag = array_shift($tag) ?: [
+                            'background' => '#000',
+                            'color' => '#fff',
+                            'label' => 'not found'
+                        ];
+                        ?>
                         <tr>
-                            <th scope="row">1</th>
                             <td>
-                                <img src="img/portfolio_1.jpg" width="200" alt="">
+                                <img src="<?= $ticket['image'] ?>" width="200" alt="">
                             </td>
-                            <td>opravit</td>
+                            <td><?= $ticket['title'] ?></td>
+                            <td><?= $ticket['description'] ?></td>
                             <td>
-                                <span class="badge bg-primary-subtle border border-primary-subtle text-primary-emphasis rounded-pill">hotovo</span>
+                                <span class="badge rounded-pill"
+                                        style="background: <?= $tag['background'] ?>; color: <?= $tag['color'] ?>;">
+                                    <?= $tag['label'] ?>
+                                </span>
                             </td>
                             <td>
                                 <div class="dropdown">
@@ -40,13 +78,38 @@ session_start();
                                         akcie
                                     </button>
                                     <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">hotovo</a></li>
-                                        <li><a class="dropdown-item" href="#">v praci</a></li>
-                                        <li><a class="dropdown-item" href="#">odmietne</a></li>
-                                        <li><a class="dropdown-item" href="#">odstranit</a></li>
+                                        <li>
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/change_tag.php" method="post">
+                                                <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
+                                                <input type="hidden" name="tag" value="<?= $access['success_tickets_tag'] ?>">
+                                                <button type="submit" class="dropdown-item">hotovo</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/change_tag.php" method="post">
+                                                <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
+                                                <input type="hidden" name="tag" value="<?= $access['in_progress_tickets_tag'] ?>">
+                                                <button type="submit" class="dropdown-item">v praci</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/change_tag.php" method="post">
+                                                <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
+                                                <input type="hidden" name="tag" value="<?= $access['reject_tickets_tag'] ?>">
+                                                <button type="submit" class="dropdown-item">odmietne</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/remove.php" method="post">
+                                                <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
+                                                <button type="submit" class="dropdown-item">odstranit</button>
+                                            </form>
+                                        </li>
                                     </ul>
-                                  </div>
+                                </div>
                             </td>
+                        </tr>
+                    <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>

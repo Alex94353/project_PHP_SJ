@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../db/connect.php';
-
+$access = require __DIR__ . '/../db/access.php';
 $user = false;
 if (isset($_SESSION['user'])) {
     $query = $conn->prepare("SELECT * FROM users WHERE id = :id");
@@ -23,17 +23,22 @@ if (isset($_SESSION['user'])) {
                         </a>
                     </li>
                     <?php if ($user): ?>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="./" role="button" data-bs-toggle="dropdown"
-                               aria-expanded="false">
-                                Poziadavky
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="./add-ticket.php">Pridat</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="./my-tickets.php">moje poziadavky</a></li>
-                            </ul>
-                        </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="./" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Poziadavky
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="./add-ticket.php">Pridat</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="./my-tickets.php">moje poziadavky</a></li>
+                        </ul>
+                    </li>
+                    <?php endif; ?>
+                    <?php if ($user && (int)$user['group_id'] === $access['admin_user_group']): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="./tickets-control.php">Riadenie poziadaviek</a>
+                    </li>
                     <?php endif; ?>
                 </ul>
                 <div class="right-side d-flex">
@@ -44,17 +49,17 @@ if (isset($_SESSION['user'])) {
                                 <?= $user ? $user['first_name'] : 'ucet' ?>
                             </a>
                             <ul class="dropdown-menu">
-                                <?php if (!$user): ?>
-                                    <li><a class="dropdown-item" href="./login.php">login</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="./register.php">sign up</a></li>
-                                <?php else: ?>
-                                    <li>
-                                        <form action="./db/logout.php" method="post">
-                                            <button type="submit" class="dropdown-item">logout</button>
-                                        </form>
-                                    </li>
-                                <?php endif; ?>
+                            <?php if (!$user): ?>
+                                <li><a class="dropdown-item" href="./login.php">login</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="./register.php">sign up</a></li>
+                            <?php else: ?>
+                                <li>
+                                    <form action="./db/logout.php" method="post">
+                                        <button type="submit" class="dropdown-item">logout</button>
+                                    </form>
+                                </li>
+                            <?php endif; ?>
                             </ul>
                         </li>
                     </ul>

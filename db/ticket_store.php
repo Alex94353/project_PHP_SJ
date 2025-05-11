@@ -2,6 +2,7 @@
 session_start();
 
 require_once __DIR__ . '/connect.php';
+$access = require __DIR__ . '/access.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     die('Nesprávna metóda požiadavky');
@@ -17,7 +18,7 @@ $description = $_POST['description'];
 $image = $_FILES['image'];
 
 
-$tag_id = 3;
+
 
 $path = __DIR__ . '/../uploads';
 $filename = uniqid() . '-' . $image['name'];
@@ -36,7 +37,7 @@ try {
         'title' => $title,
         'description' => $description,
         'image' => "uploads/$filename",
-        'tag_id' => $tag_id,
+        'tag_id' => $access['default_tickets_tag'],
         'user_id' => $_SESSION['user']
     ]);
     header('Location: /project_PHP_SJ/project_PHP_SJ/my-tickets.php');
