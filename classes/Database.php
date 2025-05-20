@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/Settings.php';
 
-use PDO;
-use PDOException;
 
 class Database
 {

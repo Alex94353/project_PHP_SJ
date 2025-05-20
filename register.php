@@ -16,7 +16,7 @@ session_start();
                     Register
                 </div>
                 <div class="card-body">
-                    <form method="post" action="./db/register.php">
+                    <form method="post" action="./actions/registerProcess.php">
                         <div class="mb-3">
                             <label for="email" class="form-label">e-mail</label>
                             <input type="email" name="email" class="form-control" id="email">
