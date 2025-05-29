@@ -1,12 +1,11 @@
 <?php
-require_once __DIR__ . '/../db/connect.php';
-$access = require __DIR__ . '/../db/access.php';
+
 $user = false;
-if (isset($_SESSION['user'])) {
-    $query = $conn->prepare("SELECT * FROM users WHERE id = :id");
-    $query->execute(['id' => $_SESSION['user']]);
-    $user = $query->fetch();
-}
+require_once __DIR__ . '/../classes/Database.php';
+require_once __DIR__ . '/../classes/Auth.php';
+require_once __DIR__ . '/../config/UserRoles.php';
+$user = Auth::user();
+        
 ?>
 <header class="header">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -35,7 +34,7 @@ if (isset($_SESSION['user'])) {
                         </ul>
                     </li>
                     <?php endif; ?>
-                    <?php if ($user && (int)$user['group_id'] === $access['admin_user_group']): ?>
+                    <?php if ($user && (int)$user['group_id'] === UserRoles::ADMIN): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="./tickets-control.php">Riadenie poziadaviek</a>
                     </li>

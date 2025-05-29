@@ -1,5 +1,8 @@
 <?php 
 session_start();
+require_once __DIR__ . '/classes/Database.php';
+$db = new Database();
+$conn = $db->getConnection();
 ?>
 <!doctype html>
 <html lang="sk">

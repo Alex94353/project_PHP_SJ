@@ -1,5 +1,8 @@
 <?php
 session_start();
+require_once __DIR__ . '/classes/Database.php';
+$db = new Database();
+$conn = $db->getConnection();
 if (!isset($_SESSION['user'])) {
     header('Location: /project_PHP_SJ/project_PHP_SJ/login.php');
     die();
