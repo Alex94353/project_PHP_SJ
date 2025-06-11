@@ -1,7 +1,5 @@
 <?php
 
-$user = false;
-require_once __DIR__ . '/../classes/Database.php';
 require_once __DIR__ . '/../classes/Auth.php';
 require_once __DIR__ . '/../config/UserRoles.php';
 $user = Auth::user();
@@ -34,7 +32,7 @@ $user = Auth::user();
                         </ul>
                     </li>
                     <?php endif; ?>
-                    <?php if ($user && (int)$user['group_id'] === UserRoles::ADMIN): ?>
+                    <?php if (Auth::isRole(UserRoles::ADMIN)): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="./tickets-control.php">Riadenie poziadaviek</a>
                     </li>
@@ -54,7 +52,7 @@ $user = Auth::user();
                                 <li><a class="dropdown-item" href="./register.php">sign up</a></li>
                             <?php else: ?>
                                 <li>
-                                    <form action="./db/logout.php" method="post">
+                                    <form action="./actions/user/logoutProcess.php" method="post">
                                         <button type="submit" class="dropdown-item">logout</button>
                                     </form>
                                 </li>

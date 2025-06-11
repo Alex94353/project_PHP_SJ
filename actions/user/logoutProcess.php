@@ -1,5 +1,5 @@
 <?php
-require_once '../classes/Auth.php';
+require_once '../../classes/Auth.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

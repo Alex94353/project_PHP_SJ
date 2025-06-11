@@ -16,7 +16,7 @@ session_start();
                     Log in
                 </div>
                 <div class="card-body">
-                    <form action="./actions/loginProcess.php" method="post">
+                    <form action="./actions/user/loginProcess.php" method="post">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp">

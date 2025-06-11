@@ -12,6 +12,19 @@ class Validator
         return true;
     }
 
+    public static function validateImage(?array $file)
+    {
+        if (
+            empty($file['error']) || 
+            $file['error'] !== UPLOAD_ERR_OK || 
+            empty($file['tmp_name']) || 
+            !is_uploaded_file($file['tmp_name'])
+        ) {
+            return false;
+        }
+        return true;
+    }
+
     public static function checkPasswordConfirmation(string $password, string $confirmation)
     {
         return $password === $confirmation;

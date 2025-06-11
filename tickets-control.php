@@ -1,27 +1,26 @@
 <?php 
 session_start();
-require_once __DIR__ . '/db/connect.php';
-$access = require __DIR__ . '/db/access.php';
 
+require_once __DIR__ . '/classes/Auth.php';
+require_once __DIR__ . '/classes/TicketService.php';
+require_once __DIR__ . '/config/TicketStatus.php';
+require_once __DIR__ . '/config/UserRoles.php';
 
-if (!isset($_SESSION['user'])) {
+$user = Auth::user();
+
+if (!Auth::isRole(UserRoles::ADMIN)) {
     header('Location: /project_PHP_SJ/project_PHP_SJ/');
-    exit;
+    die();
 }
 
-$query = $conn->prepare("SELECT * FROM users WHERE id = :id");
-$query->execute(['id' => $_SESSION['user']]);
-$user = $query->fetch();
+$ticketService = new TicketService();
+$tickets = $ticketService->getAllTickets();
+$tags = $ticketService->getAllTags();
 
-if ((int)$user['group_id'] !== $access['admin_user_group']) {
-    header('Location: /project_PHP_SJ/project_PHP_SJ/');
-    exit;
+$tagMap = [];
+foreach ($tags as $tag) {
+    $tagMap[$tag['id']] = $tag;
 }
-
-
-$tags = $conn->query("SELECT * FROM ticket_tags")->fetchAll();
-$tickets = $conn->query("SELECT * FROM tickets")->fetchAll();
-
 ?>
 <!doctype html>
 <html lang="sk">
@@ -48,18 +47,7 @@ $tickets = $conn->query("SELECT * FROM tickets")->fetchAll();
                     </thead>
                     <tbody class="table-group-divider">
                     <?php foreach ($tickets as $ticket): ?>
-                        <?php
-                        $tagId = $ticket['tag_id'];
-
-                        $tag = array_filter($tags, function ($tag) use ($tagId) {
-                            return (int)$tag['id'] === (int)$tagId;
-                        });
-                        $tag = array_shift($tag) ?: [
-                            'background' => '#000',
-                            'color' => '#fff',
-                            'label' => 'not found'
-                        ];
-                        ?>
+                        <?php $tag = $tagMap[$ticket['tag_id']] ?? null; ?>
                         <tr>
                             <td>
                                 <img src="<?= $ticket['image'] ?>" width="200" alt="">
@@ -79,28 +67,28 @@ $tickets = $conn->query("SELECT * FROM tickets")->fetchAll();
                                     </button>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/change_tag.php" method="post">
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/actions/tickets/changeTagProcess.php" method="post">
                                                 <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
-                                                <input type="hidden" name="tag" value="<?= $access['success_tickets_tag'] ?>">
+                                                <input type="hidden" name="tag" value="<?= TicketStatus::READY ?>">
                                                 <button type="submit" class="dropdown-item">hotovo</button>
                                             </form>
                                         </li>
                                         <li>
-                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/change_tag.php" method="post">
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/actions/tickets/changeTagProcess.php" method="post">
                                                 <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
-                                                <input type="hidden" name="tag" value="<?= $access['in_progress_tickets_tag'] ?>">
+                                                <input type="hidden" name="tag" value="<?= TicketStatus::IN_PROGRESS ?>">
                                                 <button type="submit" class="dropdown-item">v praci</button>
                                             </form>
                                         </li>
                                         <li>
-                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/change_tag.php" method="post">
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/actions/tickets/changeTagProcess.php" method="post">
                                                 <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
-                                                <input type="hidden" name="tag" value="<?= $access['reject_tickets_tag'] ?>">
+                                                <input type="hidden" name="tag" value="<?= TicketStatus::REJECTED ?>">
                                                 <button type="submit" class="dropdown-item">odmietne</button>
                                             </form>
                                         </li>
                                         <li>
-                                            <form action="/project_PHP_SJ/project_PHP_SJ/db/remove.php" method="post">
+                                            <form action="/project_PHP_SJ/project_PHP_SJ/actions/tickets/removeTicketProcess.php" method="post">
                                                 <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
                                                 <button type="submit" class="dropdown-item">odstranit</button>
                                             </form>

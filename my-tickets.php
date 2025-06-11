@@ -1,11 +1,20 @@
 <?php
 session_start();
-require_once __DIR__ . '/classes/Database.php';
-$db = new Database();
-$conn = $db->getConnection();
-if (!isset($_SESSION['user'])) {
+require_once __DIR__ . '/classes/Auth.php';
+require_once __DIR__ . '/classes/TicketService.php';
+$user = Auth::user();
+if (!$user) {
     header('Location: /project_PHP_SJ/project_PHP_SJ/login.php');
     die();
+}
+
+$ticketService = new TicketService();
+$tickets = $ticketService->getUserTickets($user['id']);
+$tags = $ticketService->getAllTags();
+
+$tagMap = [];
+foreach ($tags as $tag) {
+    $tagMap[$tag['id']] = $tag;
 }
 ?>
 <!doctype html>
@@ -32,28 +41,8 @@ if (!isset($_SESSION['user'])) {
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                        <?php
-                        $tags = $conn->query("SELECT * FROM `ticket_tags`")->fetchAll();
-
-                        $query = $conn->prepare("SELECT * FROM tickets WHERE user_id = :user_id");
-                        $query->execute(['user_id' => $_SESSION['user']]);
-                        $tickets = $query->fetchAll();
-                        ?>
-
                         <?php foreach ($tickets as $ticket): ?>
-                            <?php
-                            $tagId = $ticket['tag_id'];
-
-                            $tag = array_filter($tags, function ($tag) use ($tagId) {
-                                return (int)$tag['id'] === (int)$tagId;
-                            });
-
-                            $tag = array_shift($tag) ?: [
-                                'background' => '#000',
-                                'color' => '#fff',
-                                'label' => 'not found'
-                            ];
-                            ?>
+                            <?php $tag = $tagMap[$ticket['tag_id']] ?? null; ?>
                             <tr>
                                 <td>
                                     <img src="/project_PHP_SJ/project_PHP_SJ/<?= $ticket['image'] ?>" width="200" alt="">
@@ -72,7 +61,7 @@ if (!isset($_SESSION['user'])) {
                                         </button>
                                         <ul class="dropdown-menu">
                                             <li>
-                                                <form action="./db/ticket_remove.php" method="post">
+                                                <form action="./actions/tickets/removeTicketProcess.php" method="post">
                                                     <input type="hidden" name="id" value="<?= $ticket['id'] ?>">
                                                     <button type="submit" class="dropdown-item">Odstrániť</button>
                                                 </form>

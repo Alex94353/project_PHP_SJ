@@ -1,8 +1,10 @@
 <?php 
 session_start();
-require_once __DIR__ . '/classes/Database.php';
-$db = new Database();
-$conn = $db->getConnection();
+
+require_once __DIR__ . '/classes/Auth.php';
+require_once __DIR__ . '/classes/TicketService.php';
+$user = Auth::user();
+
 ?>
 <!doctype html>
 <html lang="sk">
@@ -15,39 +17,30 @@ $conn = $db->getConnection();
     <section class="main">
         <div class="container">
             <div class="row">
-                <h2 class="display-6 mb-3">Poziadavky</h2>
+                <h2 class="display-6 mb-3">Poziadavky <?= $user['first_name'] ?? 'Host' ?></h2>
             </div>
             <div class="row">
             <?php
-            if (isset($_GET['search'])) {
-                $stmt = $conn->prepare("SELECT * FROM `tickets` WHERE `title` LIKE :search ORDER BY `id` DESC");
-                $stmt->execute(['search' => "%{$_GET['search']}%"]);
-                $tickets = $stmt->fetchAll();
-            } else {
-                $tickets = $conn->query("SELECT * FROM `tickets` ORDER BY `id` DESC")->fetchAll();
-            }
-
+            $ticketService = new TicketService();
+            $query = $_GET['search'] ?? '';
+            
+            $tickets = $ticketService->search($query);
+            $tags = $ticketService->getAllTags();
+            
             if (empty($tickets)) {
                 echo '<div class="alert alert-warning" role="alert">
                         not found.
                     </div>';
             }
 
-            $tags = $conn->query("SELECT * FROM `ticket_tags`")->fetchAll();
+            $tagMap = [];
+            foreach ($tags as $tag) {
+                $tagMap[$tag['id']] = $tag;
+            }
 
-            foreach ($tickets as $ticket):
-                $tagId = $ticket['tag_id'];
-
-                $tag = array_filter($tags, function ($tag) use ($tagId) {
-                    return (int)$tag['id'] === (int)$tagId;
-                });
-
-                $tag = array_shift($tag) ?: [
-                    'background' => '#000',
-                    'color' => '#fff',
-                    'label' => 'not found'
-                ];
             ?>
+            <?php foreach ($tickets as $ticket): ?>
+                <?php $tag = $tagMap[$ticket['tag_id']] ?? null; ?>
                 <div class="card mb-3">
                     <img src="<?= $ticket['image'] ?>" class="card-img-top" alt="...">
                     <div class="card-body">

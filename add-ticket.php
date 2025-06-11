@@ -1,13 +1,8 @@
 <?php 
 session_start();
 
-require_once __DIR__ . '/classes/Database.php';
-$db = new Database();
-$conn = $db->getConnection();
-if (!isset($_SESSION['user'])) {
-    header('Location: /project_PHP_SJ/project_PHP_SJ/login.php');
-    die();
-}
+require_once __DIR__ . '/classes/Auth.php';
+require_once __DIR__ . '/classes/TicketService.php';
 ?>
 <!doctype html>
 <html lang="sk">
@@ -23,7 +18,7 @@ if (!isset($_SESSION['user'])) {
                 <h2 class="display-6 mb-3">Pridat poziadavku</h2>
             </div>
             <div class="row">
-                <form action="./db/ticket_store.php" method="post" enctype="multipart/form-data">
+                <form action="./actions/tickets/createTicketProcess.php" method="post" enctype="multipart/form-data">
                     <div class="mb-3">
                         <label for="requestTitle" class="form-label">Tema</label>
                         <input type="text" name ="title" class="form-control" id="requestTitle" placeholder="napiste temu poziadavky">

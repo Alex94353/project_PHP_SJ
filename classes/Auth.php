@@ -60,4 +60,10 @@ class Auth extends Database
         $cachedUser = $user ?: null;
         return $cachedUser;
     }
+
+    public static function isRole(int $role)
+    {
+        $user = self::user();
+        return $user && (int)$user['group_id'] === $role;
+    }
 }
