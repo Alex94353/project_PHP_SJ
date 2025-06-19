@@ -32,6 +32,7 @@ foreach ($tags as $tag) {
     <?php require_once __DIR__ . '/parts/header.php' ?>
     <section class="main">
         <div class="container">
+            <?php require_once __DIR__ . '/parts/menu.php' ?>
             <div class="row">
                 <h2 class="display-6 mb-3">Riadenie poziadaviek</h2>
             </div>

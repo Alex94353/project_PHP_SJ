@@ -34,7 +34,7 @@ $user = Auth::user();
                     <?php endif; ?>
                     <?php if (Auth::isRole(UserRoles::ADMIN)): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="./tickets-control.php">Riadenie poziadaviek</a>
+                        <a class="nav-link" href="./control-panel.php">Riadenie poziadaviek</a>
                     </li>
                     <?php endif; ?>
                 </ul>

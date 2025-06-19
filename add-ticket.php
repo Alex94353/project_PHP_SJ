@@ -1,8 +1,5 @@
 <?php 
 session_start();
-
-require_once __DIR__ . '/classes/Auth.php';
-require_once __DIR__ . '/classes/TicketService.php';
 ?>
 <!doctype html>
 <html lang="sk">
@@ -15,7 +12,7 @@ require_once __DIR__ . '/classes/TicketService.php';
     <section class="main">
         <div class="container">
             <div class="row">
-                <h2 class="display-6 mb-3">Pridat poziadavku</h2>
+                <h2 class="display-6 mb-3 mt-4">Pridat poziadavku</h2>
             </div>
             <div class="row">
                 <form action="./actions/tickets/createTicketProcess.php" method="post" enctype="multipart/form-data">

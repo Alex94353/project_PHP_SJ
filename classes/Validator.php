@@ -12,7 +12,7 @@ class Validator
         return true;
     }
 
-    public static function validateImage(?array $file)
+    public static function validateImage($file)
     {
         if (
             empty($file['error']) || 
@@ -30,4 +30,9 @@ class Validator
         return $password === $confirmation;
     }
     
+    public static function validateId(int $id)
+    {
+        return $id > 0;
+    }
+
 }

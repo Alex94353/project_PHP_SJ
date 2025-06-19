@@ -11,7 +11,7 @@ session_start();
     <?php require_once __DIR__ . '/parts/header.php' ?>
     <section class="main">
         <div class="container">
-            <div class="card">
+            <div class="card mt-4">
                 <div class="card-header">
                     Log in
                 </div>

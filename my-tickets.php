@@ -28,7 +28,7 @@ foreach ($tags as $tag) {
     <section class="main">
         <div class="container">
             <div class="row">
-                <h2 class="display-6 mb-3">Moje poziadavky</h2>
+                <h2 class="display-6 mb-3 mt-4">Moje poziadavky</h2>
             </div>
             <div class="row">
                 <table class="table">

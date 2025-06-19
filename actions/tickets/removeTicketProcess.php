@@ -1,8 +1,8 @@
 <?php
 session_start();
-require_once '../../classes/Auth.php';
-require_once '../../classes/TicketService.php';
-require_once '../../config/UserRoles.php';
+require_once __DIR__ . '/../../classes/Auth.php';
+require_once __DIR__ . '/../../classes/TicketService.php';
+require_once __DIR__ . '/../../config/UserRoles.php';
 
 if (!isset($_SESSION['user'])) {
     http_response_code(403);
