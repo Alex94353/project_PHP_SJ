@@ -4,12 +4,9 @@ require_once __DIR__ . '/Database.php';
 
 class TicketService extends Database
 {
-    protected $connection;
-
-    public function __construct()
-    {
-        $this->connect();
-        $this->connection = $this->getConnection();
+    
+    public function __construct() {
+        parent::__construct(); 
     }
 
     public function create(array $data, array $file)

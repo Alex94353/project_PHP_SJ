@@ -4,11 +4,9 @@ require_once __DIR__ . '/Database.php';
 
 
 class Register extends Database {
-    protected $connection;
-
+    
     public function __construct() {
-        $this->connect();
-        $this->connection = $this->getConnection();
+        parent::__construct(); 
     }
 
     public function registerUser($email, $firstName, $lastName, $dateOfBirth, $password, $accessLevel) {

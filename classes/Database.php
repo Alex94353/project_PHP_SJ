@@ -4,7 +4,7 @@ require_once __DIR__ . '/../config/Settings.php';
 
 class Database
 {
-    private $conn;
+    protected $connection;
 
     public function __construct()
     {
@@ -20,7 +20,7 @@ class Database
         ];
 
         try {
-            $this->conn = new PDO(
+            $this->connection = new PDO(
                 'mysql:host=' . $config['HOST'] .
                 ';dbname=' . $config['DBNAME'] .
                 ';port=' . $config['PORT'],
@@ -35,7 +35,7 @@ class Database
 
     public function getConnection()
     {
-        return $this->conn;
+        return $this->connection;
 
     }
 }

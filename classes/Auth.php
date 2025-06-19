@@ -3,11 +3,10 @@ require_once __DIR__ . '/Database.php';
 
 class Auth extends Database
 {
-    protected $connection;
 
-    public function __construct() {
-        $this->connect();
-        $this->connection = $this->getConnection();
+    public function __construct()
+    {
+        parent::__construct(); 
     }
 
     public function authenticate(string $email, string $password)
