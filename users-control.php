@@ -78,7 +78,7 @@ if ($editId) {
                                     <td>
                                         <form method="POST">
                                             <input type="hidden" name="edit_id" value="<?= $u['id'] ?>">
-                                            <button type="submit" class="btn btn-sm btn-outline-primary">pridat</button>
+                                            <button type="submit" class="btn btn-sm btn-outline-primary">upravit</button>
                                         </form>
                                         <form method="POST" action="/project_PHP_SJ/project_PHP_SJ/actions/userManage/deleteUserProcess.php">
                                             <input type="hidden" name="id" value="<?= $u['id'] ?>">

@@ -17,7 +17,7 @@ $user = Auth::user();
     <section class="main">
         <div class="container">
             <div class="row">
-                <h2 class="display-6 mb-3 mt-4">Poziadavky <?= $user['first_name'] ?? 'Host' ?></h2>
+                <h2 class="display-6 mb-3 mt-4">pristup ma: <?= $user['first_name'] ?? 'Host' ?></h2>
             </div>
             <div class="row">
             <?php

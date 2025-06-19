@@ -1,6 +1,6 @@
 <?php
-require_once '../../classes/Validator.php';
-require_once '../../classes/Auth.php';
+require_once __DIR__ . '/../../classes/Validator.php';
+require_once __DIR__ . '/../../classes/Auth.php';
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

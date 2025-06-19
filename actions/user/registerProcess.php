@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '../../classes/Validator.php';
-require_once __DIR__ . '../../classes/Register.php';
-require_once __DIR__ . '../../config/UserRoles.php';
+require_once __DIR__ . '/../../classes/Validator.php';
+require_once __DIR__ . '/../../classes/Register.php';
+require_once __DIR__ . '/../../config/UserRoles.php';
 
 
 $data = [

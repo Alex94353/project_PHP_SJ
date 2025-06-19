@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../classes/TagService.php';
+require_once __DIR__ . '/../../classes/Validator.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $oldId = (int)$_POST['old_id'];
