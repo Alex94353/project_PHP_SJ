@@ -58,7 +58,7 @@ if ($editId) {
                                     <input type="hidden" name="old_id" value="<?= $tag['id'] ?>">
                                     <tr>
                                         <td><input type="number" name="id" value="<?= $tag['id'] ?>" class="form-control" required></td>
-                                        <td><input type="text" name="label" value="<?= htmlspecialchars($tag['label']) ?>" class="form-control" required></td>
+                                        <td><input type="text" name="label" value="<?= $tag['label'] ?>" class="form-control" required></td>
                                         <td><input type="color" name="background" value="<?= $tag['background'] ?>" class="form-control form-control-color" required></td>
                                         <td><input type="color" name="color" value="<?= $tag['color'] ?>" class="form-control form-control-color" required></td>
                                         <td><?= $tag['created_at'] ?></td>

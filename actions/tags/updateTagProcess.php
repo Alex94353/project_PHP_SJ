@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $color = $_POST['color'];
 
     if (!Validator::validateId($id) || !Validator::validateId($oldId)) {
-        die('Neplatné ID');
+        die('Neplatne ID');
     }
 
 
